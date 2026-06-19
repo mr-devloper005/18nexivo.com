@@ -37,6 +37,20 @@ export function postHref(task: TaskKey, post: SitePost, route = `/${task}`) {
   return `${route}/${post.slug}`
 }
 
+export function TextOnlyPostCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
+  return (
+    <Link href={href} className="group block rounded-2xl bg-[#eef0ef] p-6 transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_55px_rgba(0,19,22,.12)]">
+      <div className="flex items-center justify-between gap-4">
+        <span className="rounded-full bg-[var(--slot4-accent)] px-3 py-1 text-[10px] font-black uppercase tracking-[.14em] text-white">{getEditableCategory(post)}</span>
+        <span className="text-3xl font-black text-black/12">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <h3 className="mt-6 line-clamp-3 text-2xl font-black leading-tight text-[#06181b] group-hover:text-[var(--slot4-accent)]">{post.title}</h3>
+      <p className="mt-4 line-clamp-3 text-sm font-semibold leading-7 text-black/58">{getEditableExcerpt(post, 160)}</p>
+      <span className="mt-6 inline-flex items-center gap-2 text-xs font-black uppercase text-[#06181b]">View details <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span>
+    </Link>
+  )
+}
+
 export function EditorialFeatureCard({ post, href, label = 'Cover story' }: { post: SitePost; href: string; label?: string }) {
   return (
     <Link href={href} className="group block min-w-0 bg-black text-white">

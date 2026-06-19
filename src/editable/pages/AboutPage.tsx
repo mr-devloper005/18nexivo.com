@@ -1,44 +1,53 @@
 import Link from 'next/link'
-import { SITE_CONFIG } from '@/lib/site-config'
+import { ArrowRight, CheckCircle2, RadioTower, Send, ShieldCheck } from 'lucide-react'
 import { pagesContent } from '@/editable/content/pages.content'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
+import { slot4BrandConfig } from '@/editable/theme/brand.config'
 
 export default function AboutPage() {
   return (
     <EditableSiteShell>
-      <main className="bg-[#f7f4ef] text-[#111]">
-        <section className="border-b border-black bg-[#c92f2f] text-white">
-          <div className="mx-auto max-w-[var(--editable-container)] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-            <p className="text-xs font-black uppercase tracking-[0.28em]">{pagesContent.about.badge}</p>
-            <h1 className="editorial-brand mt-5 max-w-5xl text-6xl font-black leading-[0.92] tracking-[-0.055em] sm:text-8xl">
-              Independent media, built for clear stories.
-            </h1>
-          </div>
-        </section>
-
-        <section className="mx-auto grid max-w-[var(--editable-container)] border-x border-black bg-white lg:grid-cols-[1.45fr_0.55fr]">
-          <article className="border-b border-black p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-16">
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-[#c92f2f]">About {SITE_CONFIG.name}</p>
-            <p className="editorial-serif mt-6 text-3xl font-bold leading-[1.25] sm:text-4xl">{pagesContent.about.description}</p>
-            <div className="article-content mt-10 space-y-6">
-              {pagesContent.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-            </div>
-          </article>
-          <aside className="grid bg-[#f7f4ef]">
-            {pagesContent.about.values.map((value, index) => (
-              <div key={value.title} className="border-b border-black p-7 last:border-b-0 sm:p-9">
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#c92f2f]">0{index + 1}</p>
-                <h2 className="editorial-serif mt-4 text-3xl font-black leading-tight">{value.title}</h2>
-                <p className="mt-4 text-sm leading-7 text-black/65">{value.description}</p>
+      <main className="bg-[#f4f4f2] text-[#06181b]">
+        <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid gap-8 lg:grid-cols-[1fr_.82fr] lg:items-center">
+              <div className="logi-reveal rounded-3xl bg-[#001316] p-7 text-white sm:p-10">
+                <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[.18em] text-[var(--slot4-accent)]"><RadioTower className="h-4 w-4" /> {pagesContent.about.badge}</p>
+                <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">Media distribution built for clear public reach.</h1>
+                <p className="mt-5 max-w-2xl text-sm font-semibold leading-8 text-white/72">{pagesContent.about.description}</p>
+                <Link href="/media-distribution" className="mt-8 inline-flex rounded-full bg-[var(--slot4-accent)] px-6 py-3 text-xs font-black uppercase text-white">Browse updates <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </div>
-            ))}
-          </aside>
-        </section>
 
-        <section className="border-y border-black bg-[#171717] text-white">
-          <div className="mx-auto flex max-w-[var(--editable-container)] flex-col gap-6 px-4 py-12 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-            <h2 className="editorial-brand max-w-3xl text-4xl font-black leading-none sm:text-5xl">Read the stories shaping the conversation.</h2>
-            <Link href="/search" className="inline-flex w-fit bg-[#c92f2f] px-6 py-4 text-xs font-black uppercase tracking-[0.18em]">Explore the archive</Link>
+              <div className="rounded-3xl bg-white p-7 shadow-[0_22px_60px_rgba(0,19,22,.08)] sm:p-9">
+                <p className="text-xs font-black uppercase tracking-[.18em] text-[var(--slot4-accent)]">About {slot4BrandConfig.siteName}</p>
+                <div className="mt-5 grid gap-4 text-sm font-semibold leading-8 text-black/62">
+                  {pagesContent.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                </div>
+              </div>
+            </div>
+
+            <div className="logi-stagger mt-8 grid gap-5 md:grid-cols-3">
+              {pagesContent.about.values.map((value, index) => (
+                <article key={value.title} className="rounded-2xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(0,19,22,.1)]">
+                  <div className="flex items-center justify-between">
+                    <CheckCircle2 className="h-5 w-5 text-[var(--slot4-accent)]" />
+                    <span className="text-3xl font-black text-black/10">0{index + 1}</span>
+                  </div>
+                  <h2 className="mt-5 text-2xl font-black leading-tight">{value.title}</h2>
+                  <p className="mt-3 text-sm leading-7 text-black/58">{value.description}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-3xl bg-[var(--slot4-accent)] p-7 text-white sm:p-9">
+              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[.16em] text-white/75"><ShieldCheck className="h-4 w-4" /> Distribution support</p>
+                  <h2 className="mt-3 max-w-2xl text-3xl font-black leading-tight">Need help publishing or routing your next announcement?</h2>
+                </div>
+                <Link href="/contact" className="inline-flex w-fit rounded-full bg-white px-6 py-3 text-xs font-black uppercase text-[#06181b]">Contact us <Send className="ml-2 h-4 w-4" /></Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>
