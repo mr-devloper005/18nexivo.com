@@ -8,6 +8,7 @@ import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import type { SitePost } from '@/lib/site-connector'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 import { getVisualPreset, visualSystem } from '@/editable/theme/visual-system'
+import { slot4BrandConfig } from '@/editable/theme/brand.config'
 
 export const revalidate = 3
 
@@ -125,8 +126,9 @@ export function TaskDetailView({ task, post, related, comments = [] }: { task: T
 
 function BackLink({ task }: { task: TaskKey }) {
   const taskConfig = getTaskConfig(task)
+  const href = task === 'mediaDistribution' ? '/media-distribution' : taskConfig?.route || '/'
   return (
-    <Link href={taskConfig?.route || '/'} className="inline-flex items-center gap-2 border-b-2 border-current pb-1 text-xs font-black uppercase tracking-[0.16em]">
+    <Link href={href} className="relative z-10 inline-flex items-center gap-2 border-b-2 border-current pb-1 text-xs font-black uppercase tracking-[0.16em]">
       <ArrowLeft className="h-4 w-4" /> Back to {taskConfig?.label || 'posts'}
     </Link>
   )
@@ -135,34 +137,35 @@ function BackLink({ task }: { task: TaskKey }) {
 function ArticleDetail({ task, post, related, comments }: { task: TaskKey; post: SitePost; related: SitePost[]; comments: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
   const images = getImages(post)
   const published = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+  const isMediaDistribution = task === 'mediaDistribution'
   return (
-    <section className="bg-[#f7f4ef]">
-      <header className="border-b border-black/20">
-        <div className="mx-auto max-w-[1180px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+    <section className="bg-[#f4f4f2]">
+      <header className="relative overflow-hidden bg-[#001316] text-white">
+        <div className="pointer-events-none absolute inset-0 opacity-30 [background:linear-gradient(166deg,transparent_0_58%,#ff604a_58%_63%,transparent_63%),radial-gradient(circle_at_76%_42%,#ff604a_0,transparent_22%)]" />
+        <div className="relative z-10 mx-auto max-w-[1180px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
           <BackLink task={task} />
-          <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t-4 border-black pt-4 text-[11px] font-black uppercase tracking-[0.16em]">
-            <span className="text-[#c92f2f]">{categoryOf(post, 'News')}</span>
-            {published ? <time>{published}</time> : null}
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t-4 border-[var(--slot4-accent)] pt-4 text-[11px] font-black uppercase tracking-[0.16em]">
+            <span className="text-[var(--slot4-accent)]">{categoryOf(post, 'Media Distribution')}</span>
+            {!isMediaDistribution && published ? <time>{published}</time> : null}
           </div>
-          <h1 className="editorial-serif mt-6 max-w-6xl text-5xl font-black leading-[0.94] tracking-[-0.055em] sm:text-6xl lg:text-[5.5rem]">{post.title}</h1>
-          {summaryText(post) ? <p className="mt-6 max-w-4xl text-xl font-bold leading-8 text-black/68 sm:text-2xl">{summaryText(post)}</p> : null}
+          <h1 className="mt-6 max-w-6xl text-5xl font-black leading-[0.96] sm:text-6xl lg:text-[5rem]">{post.title}</h1>
+          {!isMediaDistribution && summaryText(post) ? <p className="mt-6 max-w-4xl text-xl font-bold leading-8 text-white/68 sm:text-2xl">{summaryText(post)}</p> : null}
         </div>
       </header>
 
       {images[0] ? (
-        <figure className="mx-auto max-w-[1320px] border-x border-b border-black/15 bg-white">
+        <figure className="mx-auto mt-10 max-w-[1180px] overflow-hidden rounded-3xl bg-white shadow-[0_25px_70px_rgba(0,19,22,.1)]">
           <img src={images[0]} alt="" className="max-h-[760px] w-full object-cover" />
-          <figcaption className="border-t border-black/15 px-4 py-3 text-xs italic text-black/55 sm:px-6">Featured image for {post.title}</figcaption>
         </figure>
       ) : null}
 
       <div className="mx-auto grid max-w-[1180px] gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,760px)_300px] lg:px-8 lg:py-16">
-        <article className="min-w-0 border-t-4 border-black pt-8">
+        <article className="min-w-0 rounded-3xl bg-white p-6 shadow-sm sm:p-8">
           <BodyContent post={post} />
           <EditableComments slug={post.slug} comments={comments} />
         </article>
-        <div className="border-t-4 border-[#c92f2f] pt-5">
-          <RelatedPanel task={task} post={post} related={related} />
+        <div className="border-t-4 border-[var(--slot4-accent)] pt-5">
+          <RelatedPanel task={task} post={post} related={related} compact={isMediaDistribution} />
         </div>
       </div>
     </section>
@@ -404,7 +407,7 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
           <p className="text-xs font-black uppercase tracking-[0.22em] opacity-55">About this post</p>
           <div className="mt-4 grid gap-3 text-sm font-bold opacity-75">
             <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
-            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
+            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {slot4BrandConfig.siteName}</p>
             {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
           </div>
         </div>
